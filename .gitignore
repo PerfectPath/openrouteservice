@@ -24,6 +24,7 @@ node_modules/
 ors-api/src/main/resources/ors-config*
 ors-config*
 ors-docker/**
+!ors-docker/config/ors-config.yml
 
 envs/
 ors-config-repo/
