@@ -24,8 +24,7 @@ RUN mvn -pl '!ors-test-scenarios,!ors-report-aggregation' \
     -q clean package -DskipTests -Dmaven.test.skip=true
 
 FROM docker.io/maven:3.9.9-amazoncorretto-21-alpine AS build-go
-# Setup the target system with the right user and folders.
-RUN apk add --no-cache go && \
+RUN apk update && apk add --no-cache go && \
     GO111MODULE=on go install github.com/mikefarah/yq/v4@v4.44.5
 
 # build final image, just copying stuff inside
@@ -36,7 +35,7 @@ ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 
 # Setup the target system with the right user and folders.
-RUN apk update && apk add --no-cache bash=~5 jq=~1 openssl=~3 wget=~1.21 && \
+RUN apk update && apk add --no-cache bash jq openssl wget && \
     addgroup -g 1000 ors && \
     mkdir -p /home/ors/logs /home/ors/files /home/ors/graphs /home/ors/elevation_cache && \
     adduser -D -h /home/ors -u 1000 --system -G ors ors && \
