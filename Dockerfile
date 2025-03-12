@@ -31,29 +31,22 @@ RUN apk add --no-cache go && \
 # build final image, just copying stuff inside
 FROM docker.io/amazoncorretto:21.0.4-alpine3.20 AS publish
 
-# Build ARGS
-ARG UID=1000
-ARG GID=1000
-ARG OSM_FILE=./ors-api/src/test/files/heidelberg.test.pbf
-ARG ORS_HOME=/home/ors
-ARG OSM_URL=https://download.geofabrik.de/south-america/chile-latest.osm.pbf
-
-# Set the default language
+# Set environment variables
+ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 
 # Setup the target system with the right user and folders.
 RUN apk update && apk add --no-cache bash=~5 jq=~1 openssl=~3 wget=~1.21 && \
-    addgroup ors -g ${GID} && \
-    mkdir -p ${ORS_HOME}/logs ${ORS_HOME}/files ${ORS_HOME}/graphs ${ORS_HOME}/elevation_cache  && \
-    adduser -D -h ${ORS_HOME} -u ${UID} --system -G ors ors  && \
-    chown ors:ors ${ORS_HOME} \
-    # Give all permissions to the user
-    && chmod -R 777 ${ORS_HOME}
+    addgroup -g 1000 ors && \
+    mkdir -p /home/ors/logs /home/ors/files /home/ors/graphs /home/ors/elevation_cache && \
+    adduser -D -h /home/ors -u 1000 --system -G ors ors && \
+    chown -R ors:ors /home/ors && \
+    chmod -R 777 /home/ors
 
 # Download Chile OSM file and set up files
-RUN mkdir -p ${ORS_HOME}/files && \
-    wget -q ${OSM_URL} -O ${ORS_HOME}/files/chile-latest.osm.pbf && \
-    chown ors:ors ${ORS_HOME}/files/chile-latest.osm.pbf
+RUN mkdir -p /home/ors/files && \
+    wget -q https://download.geofabrik.de/south-america/chile-latest.osm.pbf -O /home/ors/files/chile-latest.osm.pbf && \
+    chown ors:ors /home/ors/files/chile-latest.osm.pbf
 
 # Copy over the needed bits and pieces from the other stages.
 COPY --chown=ors:ors --from=build /tmp/ors/ors-api/target/ors.jar /ors.jar
@@ -73,10 +66,8 @@ RUN yq -i -p=props -o=props \
 
 ENV BUILD_GRAPHS="False"
 ENV REBUILD_GRAPHS="False"
-# Set the ARG to an ENV. Else it will be lost.
-ENV ORS_HOME=${ORS_HOME}
 
-WORKDIR ${ORS_HOME}
+WORKDIR /home/ors
 
 # Healthcheck
 HEALTHCHECK --interval=3s --timeout=2s CMD ["sh", "-c", "wget --quiet --tries=1 --spider http://localhost:8082/ors/v2/health || exit 1"]
