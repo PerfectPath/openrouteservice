@@ -33,7 +33,7 @@ FROM docker.io/amazoncorretto:21.0.4-alpine3.20 AS publish
 # Set environment variables
 ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
-ENV OSM_PBF_URL='http://osm-data.railway.internal:8080/osm/osm-data.pbf'
+ENV OSM_PBF_URL='http://[osm-data.railway.internal]:8080/osm/osm-data.pbf'
 
 
 # Setup the target system with the right user and folders.
@@ -46,7 +46,7 @@ RUN apk update && apk add --no-cache bash jq openssl wget && \
 
 # Download Chile OSM file and set up files
 RUN mkdir -p /home/ors/files && \
-    wget -q ${OSM_PBF_URL} -O /home/ors/files/chile-latest.osm.pbf && \
+    wget -6 -q ${OSM_PBF_URL} -O /home/ors/files/chile-latest.osm.pbf && \
     chown ors:ors /home/ors/files/chile-latest.osm.pbf
 
 # Copy over the needed bits and pieces from the other stages.
