@@ -5,10 +5,22 @@
 ors:
   engine:
     profile_default:
+      enabled: true
+      graph_path: graphs
       build:
         source_file: /home/ors/files/chile-latest.osm.pbf
         elevation_smoothing: true
         graph_profile: driving-car
+        encoder_flags_size: 8
+        instructions: true
+        preparation:
+          min_network_size: 200
+          methods:
+            lm:
+              enabled: true
+              threads: 1
+              weightings: recommended,shortest
+              landmarks: 16
     profiles:
       driving-car:
         enabled: true
@@ -16,6 +28,13 @@ ors:
           turn_costs: true
           block_fords: false
           use_acceleration: true
+        build:
+          preparation:
+            methods:
+              ch:
+                enabled: true
+                threads: 1
+                weightings: fastest
 
 ################################################################################
 ### Configuration file for openrouteservice. For a description please visit: ###

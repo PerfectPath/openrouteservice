@@ -35,6 +35,7 @@ ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 ENV OSM_PBF_URL='https://download.geofabrik.de/south-america/chile-latest.osm.pbf'
 ENV FORCE_DOWNLOAD='false'
+ENV ORS_CONFIG=/home/ors/ors-config.yml
 
 
 # Setup the target system with the right user and folders.
@@ -57,16 +58,17 @@ COPY --chown=ors:ors ./docker-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 COPY --chown=ors:ors --from=build-go /root/go/bin/yq /bin/yq
 
-# Copy the example config files to the build folder
-COPY --chown=ors:ors ./ors-config.yml /example-ors-config.yml
-COPY --chown=ors:ors ./ors-config.env /example-ors-config.env
+# Copy and configure the config files
+COPY --chown=ors:ors ./ors-config.yml /home/ors/ors-config.yml
+COPY --chown=ors:ors ./ors-config.env /home/ors/ors-config.env
 
-# Rewrite the example config to use the right files in the container
+# Rewrite the config to use the right files in the container
 RUN yq -i -p=props -o=props \
     '.ors.engine.profile_default.build.source_file="/home/ors/files/chile-latest.osm.pbf"' \
-    /example-ors-config.env && \
+    /home/ors/ors-config.env && \
     yq -i e '.ors.engine.profile_default.build.source_file = "/home/ors/files/chile-latest.osm.pbf"' \
-    /example-ors-config.yml
+    /home/ors/ors-config.yml && \
+    chmod 644 /home/ors/ors-config.yml /home/ors/ors-config.env
 
 ENV BUILD_GRAPHS="False"
 ENV REBUILD_GRAPHS="False"

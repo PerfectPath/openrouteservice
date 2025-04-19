@@ -30,6 +30,12 @@ Releasing is documented in RELEASE.md
   - Added FORCE_DOWNLOAD environment variable to control file downloads
   - Added script to handle conditional downloads of OSM files
   - Improved error handling and logging for download process
+
+### Changed
+- Updated configuration file structure and location
+  - Moved configuration file to /home/ors/ors-config.yml
+  - Added ORS_CONFIG environment variable
+  - Improved profile configuration with proper defaults
 - Automatic OSM file download during Docker build process
   - Added new ARG `OSM_URL` in Dockerfile for configurable map source
   - Added wget installation in the final image
