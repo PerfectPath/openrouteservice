@@ -37,7 +37,9 @@ ENV OSM_PBF_URL='http://[osm-data.railway.internal]:8080/osm/osm-data.pbf'
 
 
 # Setup the target system with the right user and folders.
-RUN apk update && apk add --no-cache bash jq openssl wget bind-tools curl && \
+RUN echo "ipv6" >> /etc/modules && \
+    echo "net.ipv6.conf.all.disable_ipv6 = 0" >> /etc/sysctl.conf && \
+    apk update && apk add --no-cache bash jq openssl wget bind-tools curl && \
     addgroup -g 1000 ors && \
     mkdir -p /home/ors/logs /home/ors/files /home/ors/graphs /home/ors/elevation_cache && \
     adduser -D -h /home/ors -u 1000 --system -G ors ors && \
@@ -46,10 +48,8 @@ RUN apk update && apk add --no-cache bash jq openssl wget bind-tools curl && \
 
 # Download Chile OSM file and set up files
 RUN mkdir -p /home/ors/files && \
-    echo "Verificando resolución DNS..." && \
-    nslookup -type=AAAA osm-data.railway.internal && \
     echo "Intentando descarga con curl..." && \
-    curl -v -6 -L ${OSM_PBF_URL} --resolve "osm-data.railway.internal:8080:[::1]" -o /home/ors/files/chile-latest.osm.pbf && \
+    curl -v -L --retry 5 --retry-delay 10 --retry-all-errors --retry-max-time 300 ${OSM_PBF_URL} -o /home/ors/files/chile-latest.osm.pbf && \
     chown ors:ors /home/ors/files/chile-latest.osm.pbf
 
 # Copy over the needed bits and pieces from the other stages.
