@@ -34,6 +34,7 @@ FROM docker.io/amazoncorretto:21.0.4-alpine3.20 AS publish
 ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
 ENV OSM_PBF_URL='http://[osm-data.railway.internal]:8080/osm/osm-data.pbf'
+ENV FORCE_DOWNLOAD='false'
 
 
 # Setup the target system with the right user and folders.
@@ -45,16 +46,15 @@ RUN echo "ipv6" >> /etc/modules && \
     adduser -D -h /home/ors -u 1000 --system -G ors ors && \
     chown -R ors:ors /home/ors && \
     chmod -R 777 /home/ors
-
-# Download Chile OSM file and set up files
+# Create directories for OSM files
 RUN mkdir -p /home/ors/files && \
-    echo "Intentando descarga con curl..." && \
-    curl -v -L --retry 5 --retry-delay 10 --retry-all-errors --retry-max-time 300 ${OSM_PBF_URL} -o /home/ors/files/chile-latest.osm.pbf && \
-    chown ors:ors /home/ors/files/chile-latest.osm.pbf
+    chown -R ors:ors /home/ors/files
+
 
 # Copy over the needed bits and pieces from the other stages.
 COPY --chown=ors:ors --from=build /tmp/ors/ors-api/target/ors.jar /ors.jar
 COPY --chown=ors:ors ./docker-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 COPY --chown=ors:ors --from=build-go /root/go/bin/yq /bin/yq
 
 # Copy the example config files to the build folder

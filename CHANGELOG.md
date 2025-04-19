@@ -26,6 +26,10 @@ Releasing is documented in RELEASE.md
 -->
 ## [unreleased]
 ### Added
+- Added caching system for OSM file downloads
+  - Added FORCE_DOWNLOAD environment variable to control file downloads
+  - Added script to handle conditional downloads of OSM files
+  - Improved error handling and logging for download process
 - Automatic OSM file download during Docker build process
   - Added new ARG `OSM_URL` in Dockerfile for configurable map source
   - Added wget installation in the final image
