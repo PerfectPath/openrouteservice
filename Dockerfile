@@ -33,7 +33,7 @@ FROM docker.io/amazoncorretto:21.0.4-alpine3.20 AS publish
 # Set environment variables
 ENV ORS_HOME=/home/ors
 ENV LANG='en_US' LANGUAGE='en_US' LC_ALL='en_US'
-ENV OSM_PBF_URL='http://osm-data.railway.internal:8080/osm/osm-data.pbf'
+ENV OSM_PBF_URL='http://[osm-data.railway.internal]:8080/osm/osm-data.pbf'
 
 
 # Setup the target system with the right user and folders.
