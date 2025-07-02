@@ -32,7 +32,7 @@ ors:
           preparation:
             methods:
               ch:
-                enabled: true
+                enabled: false
                 threads: 1
                 weightings: fastest
 

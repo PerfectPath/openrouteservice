@@ -25,7 +25,7 @@ services:
       - ./ors-docker/logs:/home/ors/logs  # Mount logs directory individually
       - ./ors-docker/files:/home/ors/files  # Mount files directory individually
     environment:
-      REBUILD_GRAPHS: "True"  # Set to True to rebuild graphs on container start.
+      REBUILD_GRAPHS: "False"  # Set to True to rebuild graphs on container start.
       CONTAINER_LOG_LEVEL: INFO  # Log level for the container. Possible values: DEBUG, INFO, WARNING, ERROR, CRITICAL
       ors.engine.profile_default.build.source_file: /home/ors/files/chile-latest.osm.pbf
       ors.engine.profiles.driving-car.enabled: "true"
@@ -40,8 +40,8 @@ services:
       # Configure the memory settings for JAVA or pass additional opts
       # Fore more available ENV properties see Prepare CATALINA_OPTS and JAVA_OPTS
       # in https://github.com/GIScience/openrouteservice/blob/main/docker-entrypoint.sh
-      XMS: 4g  # start RAM assigned to java
-      XMX: 8g  # max RAM assigned to java. Rule of Thumb: <PBF-size> * <profiles> * 2
+      XMS: 2g  # start RAM assigned to java
+      XMX: 4g  # max RAM assigned to java. Rule of Thumb: <PBF-size> * <profiles> * 2
       # Example: 1.5 GB pbf size, two profiles (car and foot-walking)
       # -> 1.5 * 2 * 2 = 6. Set xmx to be AT LEAST `-Xmx6g`
       ADDITIONAL_JAVA_OPTS: ""  # further options you want to pass to the java command
