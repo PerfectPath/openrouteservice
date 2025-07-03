@@ -142,6 +142,26 @@ ors:
                 active_landmarks: 6
               core:
                 active_landmarks: 6
+      # Explicitly disable public-transport profile to avoid GTFS errors
+      public-transport:
+        enabled: false
+      # Disable other profiles that might cause issues
+      driving-hgv:
+        enabled: false
+      cycling-regular:
+        enabled: false
+      cycling-mountain:
+        enabled: false
+      cycling-road:
+        enabled: false
+      cycling-electric:
+        enabled: false
+      foot-walking:
+        enabled: false
+      foot-hiking:
+        enabled: false
+      wheelchair:
+        enabled: false
 
 ##### General server settings #####
 server:
