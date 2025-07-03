@@ -83,16 +83,16 @@ ors:
 #    root: WARN
 #    org.heigit: INFO
 ##### openrouteservice specific settings #####
-#ors:
-#  cors:
-#    allowed_origins: "*"
-#    allowed_headers: Content-Type, X-Requested-With, accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization
-#    preflight_max_age: 600
-#  messages:
-#  ##### ORS endpoints settings #####
-#  endpoints:
-#    routing:
-#      enabled: true
+ors:
+  cors:
+    allowed_origins: "*"
+    allowed_headers: Content-Type, X-Requested-With, accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization
+    preflight_max_age: 600
+  messages:
+  ##### ORS endpoints settings #####
+  endpoints:
+    routing:
+      enabled: true
 #      attribution: openrouteservice.org, OpenStreetMap contributors, tmc - BASt
 #      gpx_name: ORSRouting
 #      gpx_description: This is a directions instructions file as GPX, generated from openrouteservice
