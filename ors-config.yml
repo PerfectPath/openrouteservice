@@ -2,7 +2,22 @@
 ### Minimal configuration example file for openrouteservice. For a description please visit: ###
 ### https://giscience.github.io/openrouteservice/run-instance/configuration/                 ###
 ################################################################################################
+################################################################################
+### Configuration file for openrouteservice. For a description please visit: ###
+### https://giscience.github.io/openrouteservice/run-instance/configuration/ ###
+################################################################################
+##### openrouteservice specific settings #####
 ors:
+  cors:
+    allowed_origins: "*"
+    allowed_headers: Content-Type, X-Requested-With, accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization
+    preflight_max_age: 600
+  messages:
+  ##### ORS endpoints settings #####
+  endpoints:
+    routing:
+      enabled: true
+  ##### ORS engine settings #####
   engine:
     profile_default:
       enabled: true
@@ -36,10 +51,6 @@ ors:
                 threads: 1
                 weightings: fastest
 
-################################################################################
-### Configuration file for openrouteservice. For a description please visit: ###
-### https://giscience.github.io/openrouteservice/run-instance/configuration/ ###
-################################################################################
 ##### General server settings #####
 #server:
 #  port: 8082
@@ -82,17 +93,6 @@ ors:
 #  level:
 #    root: WARN
 #    org.heigit: INFO
-##### openrouteservice specific settings #####
-ors:
-  cors:
-    allowed_origins: "*"
-    allowed_headers: Content-Type, X-Requested-With, accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization
-    preflight_max_age: 600
-  messages:
-  ##### ORS endpoints settings #####
-  endpoints:
-    routing:
-      enabled: true
 #      attribution: openrouteservice.org, OpenStreetMap contributors, tmc - BASt
 #      gpx_name: ORSRouting
 #      gpx_description: This is a directions instructions file as GPX, generated from openrouteservice
